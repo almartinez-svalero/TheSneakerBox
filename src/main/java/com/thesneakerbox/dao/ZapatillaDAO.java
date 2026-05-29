@@ -8,7 +8,11 @@ public interface ZapatillaDAO {
 
     List<Zapatilla> findAll();
 
+    Zapatilla findById(int id);
+
     void save(Zapatilla zapatilla);
+
+    void update(Zapatilla zapatilla);
 
     void delete(int id);
 

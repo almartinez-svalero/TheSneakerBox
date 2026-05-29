@@ -3,6 +3,11 @@
 <%@ page import="com.thesneakerbox.model.Zapatilla" %>
 <%@ page import="com.thesneakerbox.model.Marca" %>
 
+<%
+    Zapatilla zapatillaEditar =
+            (Zapatilla) request.getAttribute("zapatillaEditar");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,15 +37,26 @@
 
     </div>
 
-    <h3 class="mt-5">Nueva Zapatilla</h3>
+    <h3 class="mt-5">
+
+        <%= zapatillaEditar != null
+                ? "Editar Zapatilla"
+                : "Nueva Zapatilla" %>
+
+    </h3>
 
     <form method="post" action="zapatillas" class="mb-5">
+
+        <input type="hidden"
+               name="id"
+               value="<%= zapatillaEditar != null ? zapatillaEditar.getId() : "" %>">
 
         <div class="mb-3">
             <input type="text"
                    name="nombre"
                    class="form-control"
                    placeholder="Nombre"
+                   value="<%= zapatillaEditar != null ? zapatillaEditar.getNombre() : "" %>"
                    required>
         </div>
 
@@ -50,6 +66,7 @@
                    name="precio"
                    class="form-control"
                    placeholder="Precio"
+                   value="<%= zapatillaEditar != null ? zapatillaEditar.getPrecio() : "" %>"
                    required>
         </div>
 
@@ -58,6 +75,7 @@
                    name="stock"
                    class="form-control"
                    placeholder="Stock"
+                   value="<%= zapatillaEditar != null ? zapatillaEditar.getStock() : "" %>"
                    required>
         </div>
 
@@ -65,7 +83,8 @@
             <input type="text"
                    name="color"
                    class="form-control"
-                   placeholder="Color">
+                   placeholder="Color"
+                   value="<%= zapatillaEditar != null ? zapatillaEditar.getColor() : "" %>">
         </div>
 
         <div class="mb-3">
@@ -87,8 +106,14 @@
                         for (Marca marca : marcas) {
                 %>
 
-                <option value="<%= marca.getId() %>">
+                <option value="<%= marca.getId() %>"
+                    <%= zapatillaEditar != null
+                            && zapatillaEditar.getMarcaId() == marca.getId()
+                            ? "selected"
+                            : "" %>>
+
                     <%= marca.getNombre() %>
+
                 </option>
 
                 <%
@@ -103,7 +128,9 @@
         <button type="submit"
                 class="btn btn-success">
 
-            Guardar Zapatilla
+            <%= zapatillaEditar != null
+                    ? "Actualizar Zapatilla"
+                    : "Guardar Zapatilla" %>
 
         </button>
 
@@ -137,18 +164,20 @@
         <tr>
 
             <td><%= zapatilla.getId() %></td>
-
             <td><%= zapatilla.getNombre() %></td>
-
             <td><%= zapatilla.getPrecio() %></td>
-
             <td><%= zapatilla.getStock() %></td>
-
             <td><%= zapatilla.getColor() %></td>
-
             <td><%= zapatilla.getNombreMarca() %></td>
 
             <td>
+
+                <a href="zapatillas?action=edit&id=<%= zapatilla.getId() %>"
+                   class="btn btn-warning btn-sm">
+
+                    Editar
+
+                </a>
 
                 <a href="zapatillas?action=delete&id=<%= zapatilla.getId() %>"
                    class="btn btn-danger btn-sm"
