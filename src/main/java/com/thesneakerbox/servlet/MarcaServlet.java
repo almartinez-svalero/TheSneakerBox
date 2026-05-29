@@ -15,22 +15,48 @@ import java.util.List;
 @WebServlet("/marcas")
 public class MarcaServlet extends HttpServlet {
 
+    private final MarcaDAOImpl marcaDAO =
+            new MarcaDAOImpl();
+
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println("PROYECTO NUEVO FUNCIONANDO");
-
-        MarcaDAOImpl marcaDAO = new MarcaDAOImpl();
-
         List<Marca> marcas = marcaDAO.findAll();
-
-        System.out.println("TOTAL MARCAS: " + marcas.size());
 
         request.setAttribute("marcas", marcas);
 
         request.getRequestDispatcher("/views/marcas.jsp")
                 .forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws IOException {
+
+        String nombre =
+                request.getParameter("nombre");
+
+        String pais =
+                request.getParameter("pais");
+
+        boolean premium =
+                request.getParameter("premium") != null;
+
+        String logo =
+                request.getParameter("logo");
+
+        Marca marca = new Marca();
+
+        marca.setNombre(nombre);
+        marca.setPais(pais);
+        marca.setPremium(premium);
+        marca.setLogo(logo);
+
+        marcaDAO.save(marca);
+
+        response.sendRedirect("marcas");
     }
 }

@@ -7,7 +7,6 @@ import com.thesneakerbox.utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,24 +21,14 @@ public class MarcaDAOImpl implements MarcaDAO {
 
         try {
 
-            System.out.println("ANTES DE CONEXION");
-
             Connection connection = DBConnection.getConnection();
-
-            System.out.println("CONEXION OK");
 
             PreparedStatement statement =
                     connection.prepareStatement(sql);
 
-            System.out.println("STATEMENT OK");
-
             ResultSet resultSet = statement.executeQuery();
 
-            System.out.println("CONSULTA EJECUTADA");
-
             while (resultSet.next()) {
-
-                System.out.println("FILA ENCONTRADA");
 
                 Marca marca = new Marca();
 
@@ -47,20 +36,56 @@ public class MarcaDAOImpl implements MarcaDAO {
                 marca.setNombre(resultSet.getString("nombre"));
                 marca.setPais(resultSet.getString("pais"));
                 marca.setPremium(resultSet.getBoolean("premium"));
+
+                if (resultSet.getDate("fecha_creacion") != null) {
+
+                    marca.setFechaCreacion(
+                            resultSet.getDate("fecha_creacion")
+                                    .toLocalDate()
+                    );
+                }
+
                 marca.setLogo(resultSet.getString("logo"));
 
                 marcas.add(marca);
             }
 
-            System.out.println("TOTAL EN DAO: " + marcas.size());
+            resultSet.close();
+            statement.close();
+            connection.close();
 
         } catch (Exception e) {
-
-            System.out.println("ERROR EN DAO");
-
             e.printStackTrace();
         }
 
         return marcas;
+    }
+
+    @Override
+    public void save(Marca marca) {
+
+        String sql =
+                "INSERT INTO marcas(nombre, pais, premium, logo) VALUES (?, ?, ?, ?)";
+
+        try {
+
+            Connection connection = DBConnection.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql);
+
+            statement.setString(1, marca.getNombre());
+            statement.setString(2, marca.getPais());
+            statement.setBoolean(3, marca.isPremium());
+            statement.setString(4, marca.getLogo());
+
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
