@@ -10,4 +10,6 @@ public interface ZapatillaDAO {
 
     void save(Zapatilla zapatilla);
 
+    void delete(int id);
+
 }

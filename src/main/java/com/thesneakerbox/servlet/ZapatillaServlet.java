@@ -28,6 +28,23 @@ public class ZapatillaServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
+        String action =
+                request.getParameter("action");
+
+        if ("delete".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            zapatillaDAO.delete(id);
+
+            response.sendRedirect("zapatillas");
+
+            return;
+        }
+
         List<Zapatilla> zapatillas =
                 zapatillaDAO.findAll();
 

@@ -107,4 +107,26 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
             e.printStackTrace();
         }
     }
+    @Override
+    public void delete(int id) {
+
+        String sql =
+                "DELETE FROM zapatillas WHERE id = ?";
+
+        try (
+                Connection connection =
+                        DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

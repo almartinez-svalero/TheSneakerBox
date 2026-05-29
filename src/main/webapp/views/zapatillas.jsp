@@ -119,6 +119,7 @@
             <th>Stock</th>
             <th>Color</th>
             <th>Marca</th>
+            <th>Acciones</th>
         </tr>
         </thead>
 
@@ -146,6 +147,18 @@
             <td><%= zapatilla.getColor() %></td>
 
             <td><%= zapatilla.getNombreMarca() %></td>
+
+            <td>
+
+                <a href="zapatillas?action=delete&id=<%= zapatilla.getId() %>"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Eliminar zapatilla?')">
+
+                    Eliminar
+
+                </a>
+
+            </td>
 
         </tr>
 
