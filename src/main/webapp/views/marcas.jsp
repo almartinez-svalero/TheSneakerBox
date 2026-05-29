@@ -18,6 +18,51 @@
 
     <h1 class="mb-4">Listado de Marcas</h1>
 
+    <h3 class="mt-5">Nueva Marca</h3>
+
+    <form method="post" action="marcas" class="mb-4">
+
+        <div class="mb-3">
+            <input type="text"
+                   name="nombre"
+                   class="form-control"
+                   placeholder="Nombre"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text"
+                   name="pais"
+                   class="form-control"
+                   placeholder="País"
+                   required>
+        </div>
+
+        <div class="form-check mb-3">
+            <input type="checkbox"
+                   name="premium"
+                   class="form-check-input"
+                   id="premium">
+
+            <label class="form-check-label" for="premium">
+                Premium
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <input type="text"
+                   name="logo"
+                   class="form-control"
+                   placeholder="Logo">
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+            Guardar Marca
+        </button>
+
+    </form>
+
     <table class="table table-dark table-striped">
 
         <thead>
@@ -35,19 +80,20 @@
             List<Marca> marcas =
                     (List<Marca>) request.getAttribute("marcas");
 
-            for (Marca marca : marcas) {
+            if (marcas != null) {
+
+                for (Marca marca : marcas) {
         %>
 
         <tr>
             <td><%= marca.getId() %></td>
             <td><%= marca.getNombre() %></td>
             <td><%= marca.getPais() %></td>
-            <td>
-                <%= marca.isPremium() ? "Sí" : "No" %>
-            </td>
+            <td><%= marca.isPremium() ? "Sí" : "No" %></td>
         </tr>
 
         <%
+                }
             }
         %>
 

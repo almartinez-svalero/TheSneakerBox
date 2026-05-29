@@ -8,4 +8,6 @@ public interface MarcaDAO {
 
     List<Marca> findAll();
 
+    void save(Marca marca);
+
 }
