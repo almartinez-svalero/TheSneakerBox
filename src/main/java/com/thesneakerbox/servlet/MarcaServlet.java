@@ -23,9 +23,46 @@ public class MarcaServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Marca> marcas = marcaDAO.findAll();
+        String action =
+                request.getParameter("action");
 
-        request.setAttribute("marcas", marcas);
+        if ("delete".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            marcaDAO.delete(id);
+
+            response.sendRedirect("marcas");
+
+            return;
+        }
+
+        if ("edit".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            Marca marcaEditar =
+                    marcaDAO.findById(id);
+
+            request.setAttribute(
+                    "marcaEditar",
+                    marcaEditar
+            );
+        }
+
+        List<Marca> marcas =
+                marcaDAO.findAll();
+
+        request.setAttribute(
+                "marcas",
+                marcas
+        );
 
         request.getRequestDispatcher("/views/marcas.jsp")
                 .forward(request, response);
@@ -35,6 +72,9 @@ public class MarcaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws IOException {
+
+        String idStr =
+                request.getParameter("id");
 
         String nombre =
                 request.getParameter("nombre");
@@ -55,7 +95,18 @@ public class MarcaServlet extends HttpServlet {
         marca.setPremium(premium);
         marca.setLogo(logo);
 
-        marcaDAO.save(marca);
+        if (idStr != null && !idStr.isEmpty()) {
+
+            marca.setId(
+                    Integer.parseInt(idStr)
+            );
+
+            marcaDAO.update(marca);
+
+        } else {
+
+            marcaDAO.save(marca);
+        }
 
         response.sendRedirect("marcas");
     }

@@ -19,14 +19,15 @@ public class MarcaDAOImpl implements MarcaDAO {
 
         String sql = "SELECT * FROM marcas";
 
-        try {
+        try (
+                Connection connection = DBConnection.getConnection();
 
-            Connection connection = DBConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql);
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
-
-            ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet =
+                        statement.executeQuery()
+        ) {
 
             while (resultSet.next()) {
 
@@ -50,10 +51,6 @@ public class MarcaDAOImpl implements MarcaDAO {
                 marcas.add(marca);
             }
 
-            resultSet.close();
-            statement.close();
-            connection.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,17 +59,53 @@ public class MarcaDAOImpl implements MarcaDAO {
     }
 
     @Override
+    public Marca findById(int id) {
+
+        String sql = "SELECT * FROM marcas WHERE id = ?";
+
+        try (
+                Connection connection = DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                Marca marca = new Marca();
+
+                marca.setId(resultSet.getInt("id"));
+                marca.setNombre(resultSet.getString("nombre"));
+                marca.setPais(resultSet.getString("pais"));
+                marca.setPremium(resultSet.getBoolean("premium"));
+                marca.setLogo(resultSet.getString("logo"));
+
+                return marca;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
     public void save(Marca marca) {
 
         String sql =
                 "INSERT INTO marcas(nombre, pais, premium, logo) VALUES (?, ?, ?, ?)";
 
-        try {
+        try (
+                Connection connection = DBConnection.getConnection();
 
-            Connection connection = DBConnection.getConnection();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
 
             statement.setString(1, marca.getNombre());
             statement.setString(2, marca.getPais());
@@ -81,8 +114,52 @@ public class MarcaDAOImpl implements MarcaDAO {
 
             statement.executeUpdate();
 
-            statement.close();
-            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Marca marca) {
+
+        String sql =
+                "UPDATE marcas SET nombre=?, pais=?, premium=?, logo=? WHERE id=?";
+
+        try (
+                Connection connection = DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, marca.getNombre());
+            statement.setString(2, marca.getPais());
+            statement.setBoolean(3, marca.isPremium());
+            statement.setString(4, marca.getLogo());
+            statement.setInt(5, marca.getId());
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+
+        String sql = "DELETE FROM marcas WHERE id = ?";
+
+        try (
+                Connection connection = DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
