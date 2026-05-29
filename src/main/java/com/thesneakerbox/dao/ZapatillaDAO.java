@@ -8,4 +8,6 @@ public interface ZapatillaDAO {
 
     List<Zapatilla> findAll();
 
+    void save(Zapatilla zapatilla);
+
 }

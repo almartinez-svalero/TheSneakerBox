@@ -39,25 +39,11 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
                 Zapatilla zapatilla = new Zapatilla();
 
-                zapatilla.setId(
-                        resultSet.getInt("id")
-                );
-
-                zapatilla.setNombre(
-                        resultSet.getString("nombre")
-                );
-
-                zapatilla.setPrecio(
-                        resultSet.getDouble("precio")
-                );
-
-                zapatilla.setStock(
-                        resultSet.getInt("stock")
-                );
-
-                zapatilla.setColor(
-                        resultSet.getString("color")
-                );
+                zapatilla.setId(resultSet.getInt("id"));
+                zapatilla.setNombre(resultSet.getString("nombre"));
+                zapatilla.setPrecio(resultSet.getDouble("precio"));
+                zapatilla.setStock(resultSet.getInt("stock"));
+                zapatilla.setColor(resultSet.getString("color"));
 
                 if (resultSet.getDate("fecha_lanzamiento") != null) {
 
@@ -91,5 +77,34 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
         }
 
         return zapatillas;
+    }
+
+    @Override
+    public void save(Zapatilla zapatilla) {
+
+        String sql = """
+                INSERT INTO zapatillas
+                (nombre, precio, stock, color, marca_id)
+                VALUES (?, ?, ?, ?, ?)
+                """;
+
+        try (
+                Connection connection = DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, zapatilla.getNombre());
+            statement.setDouble(2, zapatilla.getPrecio());
+            statement.setInt(3, zapatilla.getStock());
+            statement.setString(4, zapatilla.getColor());
+            statement.setInt(5, zapatilla.getMarcaId());
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
