@@ -2,6 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.thesneakerbox.model.Marca" %>
 
+<%
+    Marca marcaEditar =
+            (Marca) request.getAttribute("marcaEditar");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,15 +23,26 @@
 
     <h1 class="mb-4">Listado de Marcas</h1>
 
-    <h3 class="mt-5">Nueva Marca</h3>
+    <h3 class="mt-5">
+
+        <%= marcaEditar != null
+                ? "Editar Marca"
+                : "Nueva Marca" %>
+
+    </h3>
 
     <form method="post" action="marcas" class="mb-4">
+
+        <input type="hidden"
+               name="id"
+               value="<%= marcaEditar != null ? marcaEditar.getId() : "" %>">
 
         <div class="mb-3">
             <input type="text"
                    name="nombre"
                    class="form-control"
                    placeholder="Nombre"
+                   value="<%= marcaEditar != null ? marcaEditar.getNombre() : "" %>"
                    required>
         </div>
 
@@ -35,30 +51,41 @@
                    name="pais"
                    class="form-control"
                    placeholder="País"
+                   value="<%= marcaEditar != null ? marcaEditar.getPais() : "" %>"
                    required>
         </div>
 
         <div class="form-check mb-3">
+
             <input type="checkbox"
                    name="premium"
                    class="form-check-input"
-                   id="premium">
+                   id="premium"
+                   <%= marcaEditar != null && marcaEditar.isPremium()
+                           ? "checked"
+                           : "" %>>
 
             <label class="form-check-label" for="premium">
                 Premium
             </label>
+
         </div>
 
         <div class="mb-3">
             <input type="text"
                    name="logo"
                    class="form-control"
-                   placeholder="Logo">
+                   placeholder="Logo"
+                   value="<%= marcaEditar != null ? marcaEditar.getLogo() : "" %>">
         </div>
 
         <button type="submit"
                 class="btn btn-success">
-            Guardar Marca
+
+            <%= marcaEditar != null
+                    ? "Actualizar Marca"
+                    : "Guardar Marca" %>
+
         </button>
 
     </form>
@@ -99,6 +126,13 @@
             </td>
 
             <td>
+
+                <a href="marcas?action=edit&id=<%= marca.getId() %>"
+                   class="btn btn-warning btn-sm">
+
+                    Editar
+
+                </a>
 
                 <a href="marcas?action=delete&id=<%= marca.getId() %>"
                    class="btn btn-danger btn-sm"
