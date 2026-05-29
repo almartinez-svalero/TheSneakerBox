@@ -17,12 +17,23 @@
 
     <h1 class="mb-4">Listado de Zapatillas</h1>
 
-    <a href="marcas"
-       class="btn btn-primary mb-4">
+    <div class="mb-4">
 
-        Ver Marcas
+        <a href="marcas"
+           class="btn btn-primary">
 
-    </a>
+            Ver Marcas
+
+        </a>
+
+        <a href="zapatillas"
+           class="btn btn-success">
+
+            Ver Zapatillas
+
+        </a>
+
+    </div>
 
     <table class="table table-dark table-striped">
 
@@ -33,7 +44,7 @@
             <th>Precio</th>
             <th>Stock</th>
             <th>Color</th>
-            <th>Marca ID</th>
+            <th>Marca</th>
         </tr>
         </thead>
 
@@ -60,7 +71,7 @@
 
             <td><%= zapatilla.getColor() %></td>
 
-            <td><%= zapatilla.getMarcaId() %></td>
+            <td><%= zapatilla.getNombreMarca() %></td>
 
         </tr>
 

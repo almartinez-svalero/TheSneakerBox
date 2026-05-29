@@ -17,7 +17,13 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
         List<Zapatilla> zapatillas = new ArrayList<>();
 
-        String sql = "SELECT * FROM zapatillas";
+        String sql = """
+                SELECT z.*,
+                       m.nombre AS nombre_marca
+                FROM zapatillas z
+                INNER JOIN marcas m
+                    ON z.marca_id = m.id
+                """;
 
         try (
                 Connection connection = DBConnection.getConnection();
@@ -71,6 +77,10 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
                 zapatilla.setMarcaId(
                         resultSet.getInt("marca_id")
+                );
+
+                zapatilla.setNombreMarca(
+                        resultSet.getString("nombre_marca")
                 );
 
                 zapatillas.add(zapatilla);

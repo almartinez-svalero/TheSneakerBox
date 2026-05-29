@@ -14,6 +14,8 @@ public class Zapatilla {
     private String imagen;
     private int marcaId;
 
+    private String nombreMarca;
+
     public Zapatilla() {
     }
 
@@ -87,5 +89,13 @@ public class Zapatilla {
 
     public void setMarcaId(int marcaId) {
         this.marcaId = marcaId;
+    }
+
+    public String getNombreMarca() {
+        return nombreMarca;
+    }
+
+    public void setNombreMarca(String nombreMarca) {
+        this.nombreMarca = nombreMarca;
     }
 }
