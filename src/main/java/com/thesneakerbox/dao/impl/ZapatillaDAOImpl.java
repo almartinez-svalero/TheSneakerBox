@@ -27,12 +27,8 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
         try (
                 Connection connection = DBConnection.getConnection();
-
-                PreparedStatement statement =
-                        connection.prepareStatement(sql);
-
-                ResultSet resultSet =
-                        statement.executeQuery()
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()
         ) {
 
             while (resultSet.next()) {
@@ -44,30 +40,8 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
                 zapatilla.setPrecio(resultSet.getDouble("precio"));
                 zapatilla.setStock(resultSet.getInt("stock"));
                 zapatilla.setColor(resultSet.getString("color"));
-
-                if (resultSet.getDate("fecha_lanzamiento") != null) {
-
-                    zapatilla.setFechaLanzamiento(
-                            resultSet.getDate("fecha_lanzamiento")
-                                    .toLocalDate()
-                    );
-                }
-
-                zapatilla.setEdicionLimitada(
-                        resultSet.getBoolean("edicion_limitada")
-                );
-
-                zapatilla.setImagen(
-                        resultSet.getString("imagen")
-                );
-
-                zapatilla.setMarcaId(
-                        resultSet.getInt("marca_id")
-                );
-
-                zapatilla.setNombreMarca(
-                        resultSet.getString("nombre_marca")
-                );
+                zapatilla.setMarcaId(resultSet.getInt("marca_id"));
+                zapatilla.setNombreMarca(resultSet.getString("nombre_marca"));
 
                 zapatillas.add(zapatilla);
             }
@@ -77,6 +51,42 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
         }
 
         return zapatillas;
+    }
+
+    @Override
+    public Zapatilla findById(int id) {
+
+        String sql = "SELECT * FROM zapatillas WHERE id = ?";
+
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                Zapatilla zapatilla = new Zapatilla();
+
+                zapatilla.setId(resultSet.getInt("id"));
+                zapatilla.setNombre(resultSet.getString("nombre"));
+                zapatilla.setPrecio(resultSet.getDouble("precio"));
+                zapatilla.setStock(resultSet.getInt("stock"));
+                zapatilla.setColor(resultSet.getString("color"));
+                zapatilla.setMarcaId(resultSet.getInt("marca_id"));
+
+                return zapatilla;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
@@ -90,7 +100,6 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
         try (
                 Connection connection = DBConnection.getConnection();
-
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
         ) {
@@ -107,6 +116,40 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void update(Zapatilla zapatilla) {
+
+        String sql = """
+                UPDATE zapatillas
+                SET nombre = ?,
+                    precio = ?,
+                    stock = ?,
+                    color = ?,
+                    marca_id = ?
+                WHERE id = ?
+                """;
+
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, zapatilla.getNombre());
+            statement.setDouble(2, zapatilla.getPrecio());
+            statement.setInt(3, zapatilla.getStock());
+            statement.setString(4, zapatilla.getColor());
+            statement.setInt(5, zapatilla.getMarcaId());
+            statement.setInt(6, zapatilla.getId());
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void delete(int id) {
 

@@ -45,6 +45,22 @@ public class ZapatillaServlet extends HttpServlet {
             return;
         }
 
+        if ("edit".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            Zapatilla zapatillaEditar =
+                    zapatillaDAO.findById(id);
+
+            request.setAttribute(
+                    "zapatillaEditar",
+                    zapatillaEditar
+            );
+        }
+
         List<Zapatilla> zapatillas =
                 zapatillaDAO.findAll();
 
@@ -70,6 +86,9 @@ public class ZapatillaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws IOException {
+
+        String idStr =
+                request.getParameter("id");
 
         String nombre =
                 request.getParameter("nombre");
@@ -100,7 +119,18 @@ public class ZapatillaServlet extends HttpServlet {
         zapatilla.setColor(color);
         zapatilla.setMarcaId(marcaId);
 
-        zapatillaDAO.save(zapatilla);
+        if (idStr != null && !idStr.isEmpty()) {
+
+            zapatilla.setId(
+                    Integer.parseInt(idStr)
+            );
+
+            zapatillaDAO.update(zapatilla);
+
+        } else {
+
+            zapatillaDAO.save(zapatilla);
+        }
 
         response.sendRedirect("zapatillas");
     }
