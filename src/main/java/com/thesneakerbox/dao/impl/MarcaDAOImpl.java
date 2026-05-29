@@ -19,14 +19,15 @@ public class MarcaDAOImpl implements MarcaDAO {
 
         String sql = "SELECT * FROM marcas";
 
-        try {
+        try (
+                Connection connection = DBConnection.getConnection();
 
-            Connection connection = DBConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql);
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
-
-            ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet =
+                        statement.executeQuery()
+        ) {
 
             while (resultSet.next()) {
 
@@ -50,10 +51,6 @@ public class MarcaDAOImpl implements MarcaDAO {
                 marcas.add(marca);
             }
 
-            resultSet.close();
-            statement.close();
-            connection.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,12 +64,12 @@ public class MarcaDAOImpl implements MarcaDAO {
         String sql =
                 "INSERT INTO marcas(nombre, pais, premium, logo) VALUES (?, ?, ?, ?)";
 
-        try {
+        try (
+                Connection connection = DBConnection.getConnection();
 
-            Connection connection = DBConnection.getConnection();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql);
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
 
             statement.setString(1, marca.getNombre());
             statement.setString(2, marca.getPais());
@@ -81,8 +78,26 @@ public class MarcaDAOImpl implements MarcaDAO {
 
             statement.executeUpdate();
 
-            statement.close();
-            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+
+        String sql = "DELETE FROM marcas WHERE id = ?";
+
+        try (
+                Connection connection = DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();

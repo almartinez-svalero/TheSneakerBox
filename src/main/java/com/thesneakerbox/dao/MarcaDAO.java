@@ -10,4 +10,6 @@ public interface MarcaDAO {
 
     void save(Marca marca);
 
+    void delete(int id);
+
 }

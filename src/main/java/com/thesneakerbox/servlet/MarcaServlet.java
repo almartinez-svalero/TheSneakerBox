@@ -23,7 +23,25 @@ public class MarcaServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Marca> marcas = marcaDAO.findAll();
+        String action =
+                request.getParameter("action");
+
+        if ("delete".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            marcaDAO.delete(id);
+
+            response.sendRedirect("marcas");
+
+            return;
+        }
+
+        List<Marca> marcas =
+                marcaDAO.findAll();
 
         request.setAttribute("marcas", marcas);
 

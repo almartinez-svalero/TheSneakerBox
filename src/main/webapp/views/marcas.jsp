@@ -71,6 +71,7 @@
             <th>Nombre</th>
             <th>País</th>
             <th>Premium</th>
+            <th>Acciones</th>
         </tr>
         </thead>
 
@@ -86,10 +87,29 @@
         %>
 
         <tr>
+
             <td><%= marca.getId() %></td>
+
             <td><%= marca.getNombre() %></td>
+
             <td><%= marca.getPais() %></td>
-            <td><%= marca.isPremium() ? "Sí" : "No" %></td>
+
+            <td>
+                <%= marca.isPremium() ? "Sí" : "No" %>
+            </td>
+
+            <td>
+
+                <a href="marcas?action=delete&id=<%= marca.getId() %>"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Eliminar marca?')">
+
+                    Eliminar
+
+                </a>
+
+            </td>
+
         </tr>
 
         <%
