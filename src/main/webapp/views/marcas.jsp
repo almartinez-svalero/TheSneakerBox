@@ -29,7 +29,9 @@
 
 <div class="container mt-5">
 
-    <h1 class="mb-4">Listado de Marcas</h1>
+  <h1 class="display-4 fw-bold mb-4">
+      🏷️ Gestión de Marcas
+  </h1>
 
     <form method="get"
           action="marcas"
@@ -79,7 +81,20 @@
 
             Bienvenido,
             <strong><%= usuario.getNombre() %></strong>
-            (<%= usuario.getRol() %>)
+
+            <% if (esAdmin) { %>
+
+                <span class="badge bg-danger ms-2">
+                    ADMIN
+                </span>
+
+            <% } else { %>
+
+                <span class="badge bg-primary ms-2">
+                    USER
+                </span>
+
+            <% } %>
 
         </div>
 
@@ -110,6 +125,9 @@
     </div>
 
     <% if (esAdmin) { %>
+
+  <div class="card bg-secondary bg-opacity-25 border-light mb-4">
+  <div class="card-body p-3">
 
     <h3 class="mt-5">
 
@@ -143,7 +161,7 @@
                    required>
         </div>
 
-        <div class="form-check mb-3">
+        <div class="form-check form-switch mb-3">
 
             <input type="checkbox"
                    name="premium"
@@ -177,14 +195,16 @@
         </button>
 
     </form>
-
+  </div>
+  </div>
     <% } %>
 
-    <table class="table table-dark table-striped">
+    <table class="table table-dark table-hover table-striped align-middle shadow-lg">
 
         <thead>
         <tr>
             <th>ID</th>
+            <th>Logo</th>
             <th>Nombre</th>
             <th>País</th>
             <th>Premium</th>
@@ -207,12 +227,47 @@
 
             <td><%= marca.getId() %></td>
 
+            <td>
+
+                <% if (marca.getLogo() != null && !marca.getLogo().isEmpty()) { %>
+
+                    <img src="<%= marca.getLogo() %>"
+                         width="70"
+                         height="70"
+                         class="rounded-circle border border-light"
+                         style="object-fit: cover;"
+                         onerror="this.src='https://via.placeholder.com/70';">
+
+                <% } else { %>
+
+                    <span class="badge bg-secondary">
+                        Sin logo
+                    </span>
+
+                <% } %>
+
+            </td>
+
             <td><%= marca.getNombre() %></td>
 
             <td><%= marca.getPais() %></td>
 
             <td>
-                <%= marca.isPremium() ? "Sí" : "No" %>
+
+                <% if (marca.isPremium()) { %>
+
+                    <span class="badge bg-warning text-dark">
+                        Premium
+                    </span>
+
+                <% } else { %>
+
+                    <span class="badge bg-secondary">
+                        Estándar
+                    </span>
+
+                <% } %>
+
             </td>
 
             <td>
