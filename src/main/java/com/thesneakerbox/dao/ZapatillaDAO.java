@@ -10,6 +10,8 @@ public interface ZapatillaDAO {
 
     Zapatilla findById(int id);
 
+    List<Zapatilla> buscar(String nombre, String color);
+
     void save(Zapatilla zapatilla);
 
     void update(Zapatilla zapatilla);

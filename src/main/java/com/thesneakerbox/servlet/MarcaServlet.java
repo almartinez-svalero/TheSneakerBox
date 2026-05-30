@@ -78,8 +78,28 @@ public class MarcaServlet extends HttpServlet {
             return;
         }
 
-        List<Marca> marcas =
-                marcaDAO.findAll();
+        String nombreBusqueda =
+                request.getParameter("nombre");
+
+        String paisBusqueda =
+                request.getParameter("pais");
+
+        List<Marca> marcas;
+
+        if ((nombreBusqueda != null && !nombreBusqueda.isBlank())
+                || (paisBusqueda != null && !paisBusqueda.isBlank())) {
+
+            marcas =
+                    marcaDAO.buscar(
+                            nombreBusqueda != null ? nombreBusqueda : "",
+                            paisBusqueda != null ? paisBusqueda : ""
+                    );
+
+        } else {
+
+            marcas =
+                    marcaDAO.findAll();
+        }
 
         request.setAttribute(
                 "marcas",

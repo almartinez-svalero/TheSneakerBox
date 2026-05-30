@@ -165,4 +165,48 @@ public class MarcaDAOImpl implements MarcaDAO {
             e.printStackTrace();
         }
     }
+    @Override
+    public List<Marca> buscar(String nombre, String pais) {
+
+        List<Marca> marcas = new ArrayList<>();
+
+        String sql = """
+            SELECT *
+            FROM marcas
+            WHERE nombre LIKE ?
+            AND pais LIKE ?
+            """;
+
+        try (
+                Connection connection = DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, "%" + nombre + "%");
+            statement.setString(2, "%" + pais + "%");
+
+            ResultSet resultSet =
+                    statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                Marca marca = new Marca();
+
+                marca.setId(resultSet.getInt("id"));
+                marca.setNombre(resultSet.getString("nombre"));
+                marca.setPais(resultSet.getString("pais"));
+                marca.setPremium(resultSet.getBoolean("premium"));
+                marca.setLogo(resultSet.getString("logo"));
+
+                marcas.add(marca);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return marcas;
+    }
 }

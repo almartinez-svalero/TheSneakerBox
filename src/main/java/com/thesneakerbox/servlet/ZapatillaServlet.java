@@ -81,8 +81,28 @@ public class ZapatillaServlet extends HttpServlet {
 
             return;
         }
-        List<Zapatilla> zapatillas =
-                zapatillaDAO.findAll();
+        String nombreBusqueda =
+                request.getParameter("nombre");
+
+        String colorBusqueda =
+                request.getParameter("color");
+
+        List<Zapatilla> zapatillas;
+
+        if ((nombreBusqueda != null && !nombreBusqueda.isBlank())
+                || (colorBusqueda != null && !colorBusqueda.isBlank())) {
+
+            zapatillas =
+                    zapatillaDAO.buscar(
+                            nombreBusqueda != null ? nombreBusqueda : "",
+                            colorBusqueda != null ? colorBusqueda : ""
+                    );
+
+        } else {
+
+            zapatillas =
+                    zapatillaDAO.findAll();
+        }
 
         List<Marca> marcas =
                 marcaDAO.findAll();
