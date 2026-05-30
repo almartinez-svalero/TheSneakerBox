@@ -56,6 +56,28 @@ public class MarcaServlet extends HttpServlet {
             );
         }
 
+        if ("detail".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            Marca marca =
+                    marcaDAO.findById(id);
+
+            request.setAttribute(
+                    "marca",
+                    marca
+            );
+
+            request.getRequestDispatcher(
+                    "/views/detalle-marca.jsp"
+            ).forward(request, response);
+
+            return;
+        }
+
         List<Marca> marcas =
                 marcaDAO.findAll();
 
@@ -64,8 +86,9 @@ public class MarcaServlet extends HttpServlet {
                 marcas
         );
 
-        request.getRequestDispatcher("/views/marcas.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher(
+                "/views/marcas.jsp"
+        ).forward(request, response);
     }
 
     @Override

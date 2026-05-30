@@ -60,7 +60,27 @@ public class ZapatillaServlet extends HttpServlet {
                     zapatillaEditar
             );
         }
+        if ("detail".equals(action)) {
 
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            Zapatilla zapatilla =
+                    zapatillaDAO.findById(id);
+
+            request.setAttribute(
+                    "zapatilla",
+                    zapatilla
+            );
+
+            request.getRequestDispatcher(
+                    "/views/detalle-zapatilla.jsp"
+            ).forward(request, response);
+
+            return;
+        }
         List<Zapatilla> zapatillas =
                 zapatillaDAO.findAll();
 

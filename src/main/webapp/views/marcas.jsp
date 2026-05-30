@@ -169,6 +169,13 @@
 
             <td>
 
+                <a href="marcas?action=detail&id=<%= marca.getId() %>"
+                   class="btn btn-info btn-sm">
+
+                    Detalle
+
+                </a>
+
                 <% if (esAdmin) { %>
 
                 <a href="marcas?action=edit&id=<%= marca.getId() %>"
@@ -185,10 +192,6 @@
                     Eliminar
 
                 </a>
-
-                <% } else { %>
-
-                    Solo lectura
 
                 <% } %>
 

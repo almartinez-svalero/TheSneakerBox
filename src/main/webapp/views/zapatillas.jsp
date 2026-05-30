@@ -200,6 +200,13 @@
 
             <td>
 
+                <a href="zapatillas?action=detail&id=<%= zapatilla.getId() %>"
+                   class="btn btn-info btn-sm">
+
+                    Detalle
+
+                </a>
+
                 <% if (esAdmin) { %>
 
                 <a href="zapatillas?action=edit&id=<%= zapatilla.getId() %>"
@@ -216,10 +223,6 @@
                     Eliminar
 
                 </a>
-
-                <% } else { %>
-
-                    Solo lectura
 
                 <% } %>
 
