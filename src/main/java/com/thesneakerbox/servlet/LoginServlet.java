@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
                     usuario
             );
 
-            response.sendRedirect("marcas");
+            response.sendRedirect("home");
 
         } else {
 

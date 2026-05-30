@@ -84,6 +84,12 @@
         </div>
 
         <div>
+            <a href="home"
+               class="btn btn-secondary btn-sm">
+
+                Inicio
+
+            </a>
 
             <a href="zapatillas"
                class="btn btn-primary btn-sm">
