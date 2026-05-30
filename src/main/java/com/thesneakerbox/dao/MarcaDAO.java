@@ -8,6 +8,8 @@ public interface MarcaDAO {
 
     List<Marca> findAll();
 
+    List<Marca> buscar(String nombre, String pais);
+
     Marca findById(int id);
 
     void save(Marca marca);

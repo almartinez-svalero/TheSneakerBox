@@ -31,6 +31,48 @@
 
     <h1 class="mb-4">Listado de Zapatillas</h1>
 
+    <form method="get"
+          action="zapatillas"
+          class="row g-2 mb-4">
+
+        <div class="col-md-4">
+
+            <input type="text"
+                   name="nombre"
+                   class="form-control"
+                   placeholder="Buscar por nombre">
+
+        </div>
+
+        <div class="col-md-4">
+
+            <input type="text"
+                   name="color"
+                   class="form-control"
+                   placeholder="Buscar por color">
+
+        </div>
+
+        <div class="col-md-4">
+
+            <button type="submit"
+                    class="btn btn-info">
+
+                Buscar
+
+            </button>
+
+            <a href="zapatillas"
+               class="btn btn-secondary">
+
+                Limpiar
+
+            </a>
+
+        </div>
+
+    </form>
+
     <div class="d-flex justify-content-between mb-4">
 
         <div>
@@ -200,6 +242,13 @@
 
             <td>
 
+                <a href="zapatillas?action=detail&id=<%= zapatilla.getId() %>"
+                   class="btn btn-info btn-sm">
+
+                    Detalle
+
+                </a>
+
                 <% if (esAdmin) { %>
 
                 <a href="zapatillas?action=edit&id=<%= zapatilla.getId() %>"
@@ -216,10 +265,6 @@
                     Eliminar
 
                 </a>
-
-                <% } else { %>
-
-                    Solo lectura
 
                 <% } %>
 

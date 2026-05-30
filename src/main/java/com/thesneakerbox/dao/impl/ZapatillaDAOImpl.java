@@ -172,4 +172,77 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Zapatilla> buscar(String nombre, String color) {
+
+        List<Zapatilla> zapatillas =
+                new ArrayList<>();
+
+        String sql = """
+                SELECT z.*,
+                       m.nombre AS nombre_marca
+                FROM zapatillas z
+                INNER JOIN marcas m
+                    ON z.marca_id = m.id
+                WHERE z.nombre LIKE ?
+                AND z.color LIKE ?
+                """;
+
+        try (
+                Connection connection =
+                        DBConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, "%" + nombre + "%");
+            statement.setString(2, "%" + color + "%");
+
+            ResultSet resultSet =
+                    statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                Zapatilla zapatilla =
+                        new Zapatilla();
+
+                zapatilla.setId(
+                        resultSet.getInt("id")
+                );
+
+                zapatilla.setNombre(
+                        resultSet.getString("nombre")
+                );
+
+                zapatilla.setPrecio(
+                        resultSet.getDouble("precio")
+                );
+
+                zapatilla.setStock(
+                        resultSet.getInt("stock")
+                );
+
+                zapatilla.setColor(
+                        resultSet.getString("color")
+                );
+
+                zapatilla.setMarcaId(
+                        resultSet.getInt("marca_id")
+                );
+
+                zapatilla.setNombreMarca(
+                        resultSet.getString("nombre_marca")
+                );
+
+                zapatillas.add(zapatilla);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return zapatillas;
+    }
 }

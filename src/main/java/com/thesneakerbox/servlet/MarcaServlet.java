@@ -56,16 +56,59 @@ public class MarcaServlet extends HttpServlet {
             );
         }
 
-        List<Marca> marcas =
-                marcaDAO.findAll();
+        if ("detail".equals(action)) {
+
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            Marca marca =
+                    marcaDAO.findById(id);
+
+            request.setAttribute(
+                    "marca",
+                    marca
+            );
+
+            request.getRequestDispatcher(
+                    "/views/detalle-marca.jsp"
+            ).forward(request, response);
+
+            return;
+        }
+
+        String nombreBusqueda =
+                request.getParameter("nombre");
+
+        String paisBusqueda =
+                request.getParameter("pais");
+
+        List<Marca> marcas;
+
+        if ((nombreBusqueda != null && !nombreBusqueda.isBlank())
+                || (paisBusqueda != null && !paisBusqueda.isBlank())) {
+
+            marcas =
+                    marcaDAO.buscar(
+                            nombreBusqueda != null ? nombreBusqueda : "",
+                            paisBusqueda != null ? paisBusqueda : ""
+                    );
+
+        } else {
+
+            marcas =
+                    marcaDAO.findAll();
+        }
 
         request.setAttribute(
                 "marcas",
                 marcas
         );
 
-        request.getRequestDispatcher("/views/marcas.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher(
+                "/views/marcas.jsp"
+        ).forward(request, response);
     }
 
     @Override

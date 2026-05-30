@@ -60,9 +60,49 @@ public class ZapatillaServlet extends HttpServlet {
                     zapatillaEditar
             );
         }
+        if ("detail".equals(action)) {
 
-        List<Zapatilla> zapatillas =
-                zapatillaDAO.findAll();
+            int id =
+                    Integer.parseInt(
+                            request.getParameter("id")
+                    );
+
+            Zapatilla zapatilla =
+                    zapatillaDAO.findById(id);
+
+            request.setAttribute(
+                    "zapatilla",
+                    zapatilla
+            );
+
+            request.getRequestDispatcher(
+                    "/views/detalle-zapatilla.jsp"
+            ).forward(request, response);
+
+            return;
+        }
+        String nombreBusqueda =
+                request.getParameter("nombre");
+
+        String colorBusqueda =
+                request.getParameter("color");
+
+        List<Zapatilla> zapatillas;
+
+        if ((nombreBusqueda != null && !nombreBusqueda.isBlank())
+                || (colorBusqueda != null && !colorBusqueda.isBlank())) {
+
+            zapatillas =
+                    zapatillaDAO.buscar(
+                            nombreBusqueda != null ? nombreBusqueda : "",
+                            colorBusqueda != null ? colorBusqueda : ""
+                    );
+
+        } else {
+
+            zapatillas =
+                    zapatillaDAO.findAll();
+        }
 
         List<Marca> marcas =
                 marcaDAO.findAll();
