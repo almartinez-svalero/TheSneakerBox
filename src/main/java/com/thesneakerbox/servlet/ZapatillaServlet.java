@@ -146,6 +146,9 @@ public class ZapatillaServlet extends HttpServlet {
         String color =
                 request.getParameter("color");
 
+        String imagen =
+                request.getParameter("imagen");
+
         int marcaId =
                 Integer.parseInt(
                         request.getParameter("marcaId")
@@ -157,6 +160,7 @@ public class ZapatillaServlet extends HttpServlet {
         zapatilla.setPrecio(precio);
         zapatilla.setStock(stock);
         zapatilla.setColor(color);
+        zapatilla.setImagen(imagen);
         zapatilla.setMarcaId(marcaId);
 
         if (idStr != null && !idStr.isEmpty()) {

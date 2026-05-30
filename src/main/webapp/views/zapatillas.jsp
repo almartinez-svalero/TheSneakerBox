@@ -29,82 +29,74 @@
 
 <div class="container mt-5">
 
-    <h1 class="mb-4">Listado de Zapatillas</h1>
+    <h1 class="display-4 fw-bold mb-4">
+        👟 Catálogo de Zapatillas
+    </h1>
 
     <form method="get"
           action="zapatillas"
           class="row g-2 mb-4">
 
         <div class="col-md-4">
-
             <input type="text"
                    name="nombre"
                    class="form-control"
                    placeholder="Buscar por nombre">
-
         </div>
 
         <div class="col-md-4">
-
             <input type="text"
                    name="color"
                    class="form-control"
                    placeholder="Buscar por color">
-
         </div>
 
         <div class="col-md-4">
-
             <button type="submit"
                     class="btn btn-info">
-
                 Buscar
-
             </button>
 
             <a href="zapatillas"
                class="btn btn-secondary">
-
                 Limpiar
-
             </a>
-
         </div>
 
     </form>
 
     <div class="d-flex justify-content-between mb-4">
 
-        <div>
+       <div>
 
-            Bienvenido,
-            <strong><%= usuario.getNombre() %></strong>
-            (<%= usuario.getRol() %>)
+                   Bienvenido,
+                   <strong><%= usuario.getNombre() %></strong>
 
-        </div>
+                   <% if (esAdmin) { %>
+
+                       <span class="badge bg-danger ms-2">
+                           ADMIN
+                       </span>
+
+                   <% } else { %>
+
+                       <span class="badge bg-primary ms-2">
+                           USER
+                       </span>
+
+                   <% } %>
+
+               </div>
 
         <div>
             <a href="home"
-                class="btn btn-secondary btn-sm">
-
-                Inicio
-
-            </a>
+                class="btn btn-secondary btn-sm">Inicio</a>
 
             <a href="marcas"
-               class="btn btn-primary btn-sm">
-
-                Marcas
-
-            </a>
+               class="btn btn-primary btn-sm">Marcas</a>
 
             <a href="logout"
-               class="btn btn-danger btn-sm">
-
-                Cerrar sesión
-
-            </a>
-
+               class="btn btn-danger btn-sm">Cerrar sesión</a>
         </div>
 
     </div>
@@ -112,11 +104,9 @@
     <% if (esAdmin) { %>
 
     <h3 class="mt-5">
-
         <%= zapatillaEditar != null
                 ? "Editar Zapatilla"
                 : "Nueva Zapatilla" %>
-
     </h3>
 
     <form method="post" action="zapatillas" class="mb-5">
@@ -162,21 +152,24 @@
         </div>
 
         <div class="mb-3">
+            <input type="text"
+                   name="imagen"
+                   class="form-control"
+                   placeholder="URL Imagen"
+                   value="<%= zapatillaEditar != null ? zapatillaEditar.getImagen() : "" %>">
+        </div>
 
+        <div class="mb-3">
             <select name="marcaId"
                     class="form-select"
                     required>
-
-                <option value="">
-                    Selecciona una marca
-                </option>
+                <option value="">Selecciona una marca</option>
 
                 <%
                     List<Marca> marcas =
                             (List<Marca>) request.getAttribute("marcas");
 
                     if (marcas != null) {
-
                         for (Marca marca : marcas) {
                 %>
 
@@ -185,38 +178,33 @@
                             && zapatillaEditar.getMarcaId() == marca.getId()
                             ? "selected"
                             : "" %>>
-
                     <%= marca.getNombre() %>
-
                 </option>
 
                 <%
                         }
                     }
                 %>
-
             </select>
-
         </div>
 
         <button type="submit"
                 class="btn btn-success">
-
             <%= zapatillaEditar != null
                     ? "Actualizar Zapatilla"
                     : "Guardar Zapatilla" %>
-
         </button>
 
     </form>
 
     <% } %>
 
-    <table class="table table-dark table-striped">
+    <table class="table table-dark table-hover table-striped align-middle shadow-lg">
 
         <thead>
         <tr>
             <th>ID</th>
+            <th>Imagen</th>
             <th>Nombre</th>
             <th>Precio</th>
             <th>Stock</th>
@@ -227,19 +215,25 @@
         </thead>
 
         <tbody>
-
         <%
             List<Zapatilla> zapatillas =
                     (List<Zapatilla>) request.getAttribute("zapatillas");
 
             if (zapatillas != null) {
-
                 for (Zapatilla zapatilla : zapatillas) {
         %>
 
         <tr>
-
             <td><%= zapatilla.getId() %></td>
+
+            <td>
+                <img src="<%= zapatilla.getImagen() %>"
+                     width="80"
+                     height="80"
+                     class="rounded shadow"
+                     style="object-fit: cover;">
+            </td>
+
             <td><%= zapatilla.getNombre() %></td>
             <td><%= zapatilla.getPrecio() %></td>
             <td><%= zapatilla.getStock() %></td>
@@ -247,42 +241,26 @@
             <td><%= zapatilla.getNombreMarca() %></td>
 
             <td>
-
                 <a href="zapatillas?action=detail&id=<%= zapatilla.getId() %>"
-                   class="btn btn-info btn-sm">
-
-                    Detalle
-
-                </a>
+                   class="btn btn-info btn-sm">Detalle</a>
 
                 <% if (esAdmin) { %>
 
                 <a href="zapatillas?action=edit&id=<%= zapatilla.getId() %>"
-                   class="btn btn-warning btn-sm">
-
-                    Editar
-
-                </a>
+                   class="btn btn-warning btn-sm">Editar</a>
 
                 <a href="zapatillas?action=delete&id=<%= zapatilla.getId() %>"
                    class="btn btn-danger btn-sm"
-                   onclick="return confirm('¿Eliminar zapatilla?')">
-
-                    Eliminar
-
-                </a>
+                   onclick="return confirm('¿Eliminar zapatilla?')">Eliminar</a>
 
                 <% } %>
-
             </td>
-
         </tr>
 
         <%
                 }
             }
         %>
-
         </tbody>
 
     </table>

@@ -40,6 +40,7 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
                 zapatilla.setPrecio(resultSet.getDouble("precio"));
                 zapatilla.setStock(resultSet.getInt("stock"));
                 zapatilla.setColor(resultSet.getString("color"));
+                zapatilla.setImagen(resultSet.getString("imagen"));
                 zapatilla.setMarcaId(resultSet.getInt("marca_id"));
                 zapatilla.setNombreMarca(resultSet.getString("nombre_marca"));
 
@@ -56,7 +57,10 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
     @Override
     public Zapatilla findById(int id) {
 
-        String sql = "SELECT * FROM zapatillas WHERE id = ?";
+        String sql = "SELECT z.*, m.nombre AS nombre_marca\n" +
+                "FROM zapatillas z\n" +
+                "JOIN marcas m ON z.marca_id = m.id\n" +
+                "WHERE z.id = ?";
 
         try (
                 Connection connection = DBConnection.getConnection();
@@ -74,9 +78,11 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
                 zapatilla.setId(resultSet.getInt("id"));
                 zapatilla.setNombre(resultSet.getString("nombre"));
+                zapatilla.setNombreMarca(resultSet.getString("nombre_marca"));
                 zapatilla.setPrecio(resultSet.getDouble("precio"));
                 zapatilla.setStock(resultSet.getInt("stock"));
                 zapatilla.setColor(resultSet.getString("color"));
+                zapatilla.setImagen(resultSet.getString("imagen"));
                 zapatilla.setMarcaId(resultSet.getInt("marca_id"));
 
                 return zapatilla;
@@ -94,8 +100,8 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
         String sql = """
                 INSERT INTO zapatillas
-                (nombre, precio, stock, color, marca_id)
-                VALUES (?, ?, ?, ?, ?)
+                (nombre, precio, stock, color, imagen, marca_id)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
         try (
@@ -108,7 +114,8 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
             statement.setDouble(2, zapatilla.getPrecio());
             statement.setInt(3, zapatilla.getStock());
             statement.setString(4, zapatilla.getColor());
-            statement.setInt(5, zapatilla.getMarcaId());
+            statement.setString(5, zapatilla.getImagen());
+            statement.setInt(6, zapatilla.getMarcaId());
 
             statement.executeUpdate();
 
@@ -126,6 +133,7 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
                     precio = ?,
                     stock = ?,
                     color = ?,
+                    imagen = ?,
                     marca_id = ?
                 WHERE id = ?
                 """;
@@ -140,8 +148,9 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
             statement.setDouble(2, zapatilla.getPrecio());
             statement.setInt(3, zapatilla.getStock());
             statement.setString(4, zapatilla.getColor());
-            statement.setInt(5, zapatilla.getMarcaId());
-            statement.setInt(6, zapatilla.getId());
+            statement.setString(5, zapatilla.getImagen());
+            statement.setInt(6, zapatilla.getMarcaId());
+            statement.setInt(7, zapatilla.getId());
 
             statement.executeUpdate();
 
@@ -226,6 +235,10 @@ public class ZapatillaDAOImpl implements ZapatillaDAO {
 
                 zapatilla.setColor(
                         resultSet.getString("color")
+                );
+
+                zapatilla.setImagen(
+                        resultSet.getString("imagen")
                 );
 
                 zapatilla.setMarcaId(

@@ -21,30 +21,81 @@
 
 <div class="container mt-5">
 
-    <h1>Detalle de Zapatilla</h1>
+    <h1 class="display-4 fw-bold text-center mb-5">
+        👟 Detalle de Zapatilla
+    </h1>
 
-    <div class="card mt-4">
+    <div class="row justify-content-center">
 
-        <div class="card-body text-dark">
+        <div class="col-md-8">
 
-            <p><strong>ID:</strong> <%= zapatilla.getId() %></p>
+            <div class="card shadow-lg border-0 rounded-4">
 
-            <p><strong>Nombre:</strong> <%= zapatilla.getNombre() %></p>
+                <img src="<%= zapatilla.getImagen() %>"
+                     class="card-img-top"
+                     style="height: 400px; object-fit: contain; background-color: #f8f9fa;"
+                     onerror="this.src='https://via.placeholder.com/400';">
 
-            <p><strong>Precio:</strong> <%= zapatilla.getPrecio() %> €</p>
+                <div class="card-body text-dark">
 
-            <p><strong>Stock:</strong> <%= zapatilla.getStock() %></p>
+                    <h2 class="card-title">
+                        <%= zapatilla.getNombre() %>
+                    </h2>
 
-            <p><strong>Color:</strong> <%= zapatilla.getColor() %></p>
+                    <hr>
 
-            <p><strong>Marca ID:</strong> <%= zapatilla.getMarcaId() %></p>
+                    <h3 class="text-success fw-bold mb-4">
+                        💰 <%= zapatilla.getPrecio() %> €
+                    </h3>
 
-            <a href="zapatillas"
-               class="btn btn-primary">
+                    <p>
 
-                Volver
+                        <% if (zapatilla.getStock() > 10) { %>
 
-            </a>
+                            <span class="badge bg-success">
+                                Disponible
+                            </span>
+
+                        <% } else if (zapatilla.getStock() > 0) { %>
+
+                            <span class="badge bg-warning text-dark">
+                                Últimas unidades
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-danger">
+                                Sin stock
+                            </span>
+
+                        <% } %>
+
+                    </p>
+
+                    <p>
+                        <strong>🎨 Color:</strong>
+                        <%= zapatilla.getColor() %>
+                    </p>
+
+                   <p>
+                       <strong>🏷️ Marca:</strong>
+                       <%= zapatilla.getNombreMarca() %>
+                   </p>
+
+                    <div class="mt-4">
+
+                        <a href="zapatillas"
+                           class="btn btn-primary">
+
+                            Volver al catálogo
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
