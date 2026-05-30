@@ -2,10 +2,18 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.thesneakerbox.model.Zapatilla" %>
 <%@ page import="com.thesneakerbox.model.Marca" %>
+<%@ page import="com.thesneakerbox.model.Usuario" %>
 
 <%
     Zapatilla zapatillaEditar =
             (Zapatilla) request.getAttribute("zapatillaEditar");
+
+    Usuario usuario =
+            (Usuario) session.getAttribute("usuario");
+
+    boolean esAdmin =
+            usuario != null &&
+            "ADMIN".equals(usuario.getRol());
 %>
 
 <!DOCTYPE html>
@@ -23,19 +31,37 @@
 
     <h1 class="mb-4">Listado de Zapatillas</h1>
 
-    <div class="mb-4">
+    <div class="d-flex justify-content-between mb-4">
 
-        <a href="marcas"
-           class="btn btn-primary">
-            Ver Marcas
-        </a>
+        <div>
 
-        <a href="zapatillas"
-           class="btn btn-success">
-            Ver Zapatillas
-        </a>
+            Bienvenido,
+            <strong><%= usuario.getNombre() %></strong>
+            (<%= usuario.getRol() %>)
+
+        </div>
+
+        <div>
+
+            <a href="marcas"
+               class="btn btn-primary btn-sm">
+
+                Marcas
+
+            </a>
+
+            <a href="logout"
+               class="btn btn-danger btn-sm">
+
+                Cerrar sesión
+
+            </a>
+
+        </div>
 
     </div>
+
+    <% if (esAdmin) { %>
 
     <h3 class="mt-5">
 
@@ -136,6 +162,8 @@
 
     </form>
 
+    <% } %>
+
     <table class="table table-dark table-striped">
 
         <thead>
@@ -172,6 +200,8 @@
 
             <td>
 
+                <% if (esAdmin) { %>
+
                 <a href="zapatillas?action=edit&id=<%= zapatilla.getId() %>"
                    class="btn btn-warning btn-sm">
 
@@ -186,6 +216,12 @@
                     Eliminar
 
                 </a>
+
+                <% } else { %>
+
+                    Solo lectura
+
+                <% } %>
 
             </td>
 
